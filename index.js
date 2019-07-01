@@ -1,6 +1,8 @@
 var Twit = require('twit')
 const env = require('dotenv')
+const uploadImage = require('./uploadImage');
 const badword = require('bad-words')
+
 
 const filter = new badword();
 
@@ -37,7 +39,7 @@ var T = new Twit({
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 })
 
-let lastId = '1145357730489618436';
+let lastId = '1145749792158408709';
 
 setInterval(() => {
   console.log('running')
@@ -61,13 +63,22 @@ setInterval(() => {
           if (check.includes('[KELUHAN]')) {
             // WHAT TO DO
           } else {
-            T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[index - 1].message_create.message_data.text) }, function(err, data, response) {
-              if (err) {
-                console.log(err)
-              } else {
-                console.log('tweet send')
+            // CHECK IF HAVE ATTACHMENT (PHOTO)
+            if (events[index - 1].message_create.message_data.attachment) {
+              if (events[index - 1].message_create.message_data.attachment.media.type == 'photo') {
+                let fixTweet = events[index - 1].message_create.message_data.text.split('https')
+                uploadImage(events[index - 1].message_create.message_data.attachment.media.media_url, fixTweet[0])
               }
-            })
+            } else {
+              T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[index - 1].message_create.message_data.text) }, function(err, data, response) {
+                if (err) {
+                  console.log(err)
+                } else {
+                  console.log('tweet send')
+                }
+              })
+            }
+
           }
 
           lastId = events[index - 1].id

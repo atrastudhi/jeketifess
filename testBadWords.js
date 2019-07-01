@@ -19,10 +19,7 @@ const cursed = [
   'itil'
 ];
 
-
 filter.addWords(...cursed);
-
-
 
 let b = () => {
     return {
