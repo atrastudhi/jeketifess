@@ -21,7 +21,9 @@ const cursed = [
   'pelir',
   'itil',
   'ngewe',
-  'ewe'
+  'ewe',
+  'bokep',
+  'bugil'
 ];
 
 filter.addWords(...cursed);
