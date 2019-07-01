@@ -1,5 +1,27 @@
 var Twit = require('twit')
 const env = require('dotenv')
+const badword = require('bad-words')
+
+const filter = new badword();
+
+const cursed = [
+  'ngentot',
+  'kontol',
+  'memek',
+  'tai',
+  'jancok',
+  'asu',
+  'bangsat',
+  'tempik',
+  'ngentu',
+  'anjing',
+  'babi',
+  'peler',
+  'pelir',
+  'itil'
+];
+
+filter.addWords(...cursed)
 
 env.config()
 
@@ -28,14 +50,20 @@ setInterval(() => {
 
         if (index > 0) {
           console.log('ada dong')
+          let filtered = filter.clean(events[index - 1].message_create.message_data.text)
 
-          T.post('statuses/update', { status: events[index - 1].message_create.message_data.text }, function(err, data, response) {
-            if (err) {
-              console.log(err)
-            } else {
-              console.log('tweet send')
-            }
-          })
+          // KELUHAN
+          if (filtered.includes('[KELUHAN]')) {
+            // WHAT TO DO
+          } else {
+            T.post('statuses/update', { status: '[SUREL] ' + filtered }, function(err, data, response) {
+              if (err) {
+                console.log(err)
+              } else {
+                console.log('tweet send')
+              }
+            })
+          }
 
           lastId = events[index - 1].id
         } else {
