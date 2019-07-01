@@ -25,9 +25,8 @@ filter.addWords(...cursed);
 
 
 let b = () => {
-    // let a = filter.clean('yakali gangentot');
     return {
-        test: filter.clean('yakali ga memek')
+        test: filter.clean('yakali ga ngentu')
     }
 }
 
