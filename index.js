@@ -6,6 +6,7 @@ const filter = new badword();
 
 const cursed = [
   'ngentot',
+  'ngewe',
   'kontol',
   'memek',
   'tai',
@@ -18,16 +19,18 @@ const cursed = [
   'babi',
   'peler',
   'pelir',
-  'itil'
+  'itil',
+  'ngewe',
+  'ewe'
 ];
 
-filter.addWords(...cursed)
+filter.addWords(...cursed);
 
 env.config()
 
 var T = new Twit({
   consumer_key:         process.env.CONSUMER_KEY,
-  consumer_secret:      process.env.CUNSUMER_SECRET,
+  consumer_secret:      process.env.CONSUMER_SECRET,
   access_token:         process.env.ACCESS_TOKEN,
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 })
@@ -50,13 +53,13 @@ setInterval(() => {
 
         if (index > 0) {
           console.log('ada dong')
-          let filtered = filter.clean(events[index - 1].message_create.message_data.text)
+          let check = events[index - 1].message_create.message_data.text.toUpperCase();
 
           // KELUHAN
-          if (filtered.includes('[KELUHAN]')) {
+          if (check.includes('[KELUHAN]')) {
             // WHAT TO DO
           } else {
-            T.post('statuses/update', { status: '[SUREL] ' + filtered }, function(err, data, response) {
+            T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[index - 1].message_create.message_data.text) }, function(err, data, response) {
               if (err) {
                 console.log(err)
               } else {
