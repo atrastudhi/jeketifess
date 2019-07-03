@@ -3,6 +3,7 @@ var Twit = require('twit');
 const dotenv = require('dotenv');
 const badword = require('bad-words')
 const oauth = require('oauth-signature')
+const nonce = require('nonce-generator');
 
 const toBase64 = require('base64-arraybuffer')
 
@@ -44,15 +45,17 @@ var T = new Twit({
 })
 
 let oauth1 = (link) => {
+    let ncn = nonce(11)
+    let epoch = Math.floor(new Date() / 1000)
     let signature = oauth.generate('GET', link, {
         oauth_consumer_key: process.env.CONSUMER_KEY,
         oauth_signature_method: "HMAC-SHA1",
         oauth_token: process.env.ACCESS_TOKEN, 
         oauth_version: "1.0",
-        oauth_nonce : '89eUsgO0J31',
-        oauth_timestamp : '1561997096'
+        oauth_nonce : ncn,
+        oauth_timestamp : epoch
       }, process.env.CONSUMER_SECRET, process.env.ACCESS_TOKEN_SECRET)
-    return `OAuth oauth_consumer_key="${process.env.CONSUMER_KEY}",oauth_token="${process.env.ACCESS_TOKEN}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1561997096",oauth_nonce="89eUsgO0J31",oauth_version="1.0",oauth_signature="${signature}"`
+    return `OAuth oauth_consumer_key="${process.env.CONSUMER_KEY}",oauth_token="${process.env.ACCESS_TOKEN}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="${epoch}",oauth_nonce="${ncn}",oauth_version="1.0",oauth_signature="${signature}"`
 }
 
 let uploadImage = (link, tweet) => {

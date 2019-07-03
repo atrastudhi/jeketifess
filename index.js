@@ -39,7 +39,7 @@ var T = new Twit({
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 })
 
-let lastId = '1145749792158408709';
+let lastId = '1146288591213146117';
 
 setInterval(() => {
   console.log('running')
