@@ -1,7 +1,9 @@
-var Twit = require('twit')
-const env = require('dotenv')
+var Twit = require('twit');
+const env = require('dotenv');
+const badword = require('bad-words');
+
 const uploadImage = require('./uploadImage');
-const badword = require('bad-words')
+const deleteMessage = require('./deleteMessage')
 
 
 const filter = new badword();
@@ -39,7 +41,7 @@ var T = new Twit({
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 })
 
-let lastId = '1146288591213146117';
+let lastId = '1146359096909582346';
 
 setInterval(() => {
   console.log('running')
@@ -68,6 +70,7 @@ setInterval(() => {
               if (events[index - 1].message_create.message_data.attachment.media.type == 'photo') {
                 let fixTweet = events[index - 1].message_create.message_data.text.split('https')
                 uploadImage(events[index - 1].message_create.message_data.attachment.media.media_url, fixTweet[0])
+                deleteMessage(events[index - 1].id)
               }
             } else {
               T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[index - 1].message_create.message_data.text) }, function(err, data, response) {
@@ -75,6 +78,7 @@ setInterval(() => {
                   console.log(err)
                 } else {
                   console.log('tweet send')
+                  deleteMessage(events[index - 1].id)
                 }
               })
             }
