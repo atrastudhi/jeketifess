@@ -41,53 +41,45 @@ var T = new Twit({
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 })
 
-let lastId = '1146359096909582346';
-
 setInterval(() => {
   console.log('running')
-  let index;
 
   T.get('direct_messages/events/list', {}, (err, {events}, response) => {
       if (err) {
         console.log(err)
       } else {
-        events.forEach((e, i) => {
-          if (e.id === lastId) {
-            index = i;
-          }
-        });
 
-        if (index > 0) {
-          console.log('ada dong')
-          let check = events[index - 1].message_create.message_data.text.toUpperCase();
+        if (events.length > 0) {
+          console.log('has direct message')
+          let check = events[events.length - 1].message_create.message_data.text.toUpperCase();
 
           // KELUHAN
           if (check.includes('[KELUHAN]')) {
             // WHAT TO DO
           } else {
             // CHECK IF HAVE ATTACHMENT (PHOTO)
-            if (events[index - 1].message_create.message_data.attachment) {
-              if (events[index - 1].message_create.message_data.attachment.media.type == 'photo') {
-                let fixTweet = events[index - 1].message_create.message_data.text.split('https')
-                uploadImage(events[index - 1].message_create.message_data.attachment.media.media_url, fixTweet[0])
-                deleteMessage(events[index - 1].id)
+            if (events[events.length - 1].message_create.message_data.attachment) {
+              if (events[events.length - 1].message_create.message_data.attachment.media.type == 'photo') {
+                let fixTweet = events[events.length - 1].message_create.message_data.text.split('https')
+
+                uploadImage(events[events.length - 1].message_create.message_data.attachment.media.media_url, fixTweet[0])
+                deleteMessage(events[events.length - 1].id)
               }
             } else {
-              T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[index - 1].message_create.message_data.text) }, function(err, data, response) {
+              T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[events.length - 1].message_create.message_data.text) }, function(err, data, response) {
                 if (err) {
                   console.log(err)
                 } else {
                   console.log('tweet send')
-                  deleteMessage(events[index - 1].id)
+                  deleteMessage(events[events.length - 1].id)
                 }
               })
             }
 
           }
 
-          lastId = events[index - 1].id
         } else {
-          console.log('ga ada')
+          console.log('no direct message')
         }
       }
   })
