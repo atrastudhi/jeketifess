@@ -27,7 +27,10 @@ const cursed = [
   'ngewe',
   'ewe',
   'bokep',
-  'bugil'
+  'bugil',
+  'kntl',
+  'memeq',
+  'bgst'
 ];
 
 filter.addWords(...cursed);
@@ -44,7 +47,7 @@ var T = new Twit({
 setInterval(() => {
   console.log('running')
 
-  T.get('direct_messages/events/list', {}, (err, {events}, response) => {
+  T.get('direct_messages/events/list', { count: 50 }, (err, {events}, response) => {
       if (err) {
         console.log(err)
       } else {
@@ -54,7 +57,7 @@ setInterval(() => {
           let check = events[events.length - 1].message_create.message_data.text.toUpperCase();
 
           // KELUHAN
-          if (check.includes('[KELUHAN]')) {
+          if (false) {
             // WHAT TO DO
           } else {
             // CHECK IF HAVE ATTACHMENT (PHOTO)
@@ -64,11 +67,14 @@ setInterval(() => {
 
                 uploadImage(events[events.length - 1].message_create.message_data.attachment.media.media_url, fixTweet[0])
                 deleteMessage(events[events.length - 1].id)
-              }
+              } else {
+		deleteMessage(events[events.length - 1].id)
+	      }
             } else {
               T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[events.length - 1].message_create.message_data.text) }, function(err, data, response) {
                 if (err) {
                   console.log(err)
+		  deleteMessage(events[events.length - 1].id)
                 } else {
                   console.log('tweet send')
                   deleteMessage(events[events.length - 1].id)
