@@ -5,7 +5,11 @@ let validate = (T, sender_id) => {
                 console.log(err)
                 resolve(false)
             }
-    
+            
+            if (!data.ids) {
+                return false
+            }
+
             let followers = data.ids.length;
             console.log('followers: ' + followers)
     

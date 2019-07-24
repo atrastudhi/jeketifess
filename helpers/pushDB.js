@@ -6,7 +6,7 @@ let pushDB = async (userId, content) => {
             user_id: userId,
             content_dm: content
         })
-        console.log(dm)
+        console.log('saved to db')
     } catch (err) {
         console.log(err)
     }
