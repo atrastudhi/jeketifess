@@ -83,7 +83,7 @@ setInterval(() => {
                     deleteMessage(events[events.length - 1].id)
                   } else {
                     console.log('tweet send')
-                    pushDM(events[events.length - 1].message_create.sender_id, data.id_str);
+                    await pushDM(events[events.length - 1].message_create.sender_id, data.id_str);
                     deleteMessage(events[events.length - 1].id);
                   }
                 })
