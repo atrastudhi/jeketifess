@@ -51,7 +51,7 @@ var T = new Twit({
 })
 
 setInterval(() => {
-    console.log('running...')
+  console.log('running...')
   
   T.get('direct_messages/events/list', { count: 50 }, async (err, {events}, response) => {
       if (err) {
