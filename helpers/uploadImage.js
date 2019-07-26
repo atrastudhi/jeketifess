@@ -59,7 +59,7 @@ let oauth1 = (link) => {
     return `OAuth oauth_consumer_key="${process.env.CONSUMER_KEY}",oauth_token="${process.env.ACCESS_TOKEN}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="${epoch}",oauth_nonce="${ncn}",oauth_version="1.0",oauth_signature="${signature}"`
 }
 
-let uploadImage = (link, tweet, sender_id) => {
+let uploadImage = (link, tweet, sender_id, validation = {}) => {
     axios.get(link, {
         headers: {
             Authorization: oauth1(link)
@@ -80,7 +80,7 @@ let uploadImage = (link, tweet, sender_id) => {
                         console.log(err)
                     } else {
                         console.log('tweet send');
-                        pushDM(sender_id, dataTweet.id_str);
+                        pushDM(sender_id, dataTweet.id_str, validation);
                     }
                 })
             }
