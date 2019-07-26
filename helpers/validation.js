@@ -19,7 +19,16 @@ const validate = (T, sender_id) => {
               twitter_created_at: data[0].created_at,
               bio: data[0].description
           };
+
+          const createdAt = moment(result.twitter_created_at, 'ddd MMM DD HH:mm:ss +ZZ YYYY');
+          const now = moment();
+          const months = now.diff(createdAt, 'months');
           
+          // if before probation period
+          if (months < 3) {
+            resolve(false);
+          }
+
           if (result.followers_count < 26) {
             resolve(false);
           }
