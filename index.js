@@ -60,7 +60,7 @@ setInterval(() => {
         if (events.length > 0) {
           console.log('has direct message')
           
-          let validation = await validate(T, events[events.length - 1].message_create.sender_id);
+          const validation = await validate(T, events[events.length - 1].message_create.sender_id);
           
           // validate followers minimal 15
           if (validation) {
@@ -70,27 +70,27 @@ setInterval(() => {
                 if (events[events.length - 1].message_create.message_data.attachment.media.type == 'photo') {
                   let fixTweet = events[events.length - 1].message_create.message_data.text.split('https')
                   
-                  uploadImage(events[events.length - 1].message_create.message_data.attachment.media.media_url, fixTweet[0], events[events.length - 1].message_create.sender_id)
+                  uploadImage(events[events.length - 1].message_create.message_data.attachment.media.media_url, fixTweet[0], events[events.length - 1].message_create.sender_id, validation);
                   deleteMessage(events[events.length - 1].id)
                 } else {
                   deleteMessage(events[events.length - 1].id)
                 }
               } else {
                 // NOT HAVE ATTACHMENT PHOTO
-                T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[events.length - 1].message_create.message_data.text) }, function(err, data, response) {
+                T.post('statuses/update', { status: '[SUREL] ' + filter.clean(events[events.length - 1].message_create.message_data.text) }, async function(err, data, response) {
                   if (err) {
                     console.log(err)
                     deleteMessage(events[events.length - 1].id)
                   } else {
                     console.log('tweet send')
-                    await pushDM(events[events.length - 1].message_create.sender_id, data.id_str);
+                    await pushDM(events[events.length - 1].message_create.sender_id, data.id_str, validation);
                     deleteMessage(events[events.length - 1].id);
                   }
                 })
               }
           } else {
-            console.log('not validated user')
-            pushDM(events[events.length - 1].message_create.sender_id, events[events.length - 1].message_create.message_data.text);
+						console.log('not validated user')
+            await pushDM(events[events.length - 1].message_create.sender_id, events[events.length - 1].message_create.message_data.text);
             deleteMessage(events[events.length - 1].id);
           }
 

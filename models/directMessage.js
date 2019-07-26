@@ -17,7 +17,35 @@ const DM = config.define('DirectMessage', {
     updatedAt: {
         type: Sequelize.DATE,
         defaultValue: new Date()
-    }
+		},
+		name: {
+			type: Sequelize.STRING,
+			allowNull: true
+		},
+		screen_name: {
+			type: Sequelize.STRING,
+			allowNull: true
+		},
+		followers_count: {
+				type: Sequelize.INTEGER,
+				allowNull: true
+		},
+		friends_count: {
+			type: Sequelize.INTEGER,
+			allowNull: true
+		},
+		status_count: {
+			type: Sequelize.INTEGER,
+			allowNull: true
+		},
+		twitter_created_at: {
+			type: Sequelize.STRING,
+			allowNull: true
+		},
+		bio: {
+			type: Sequelize.STRING,
+			allowNull: true
+		},
 }, {
 })
 
