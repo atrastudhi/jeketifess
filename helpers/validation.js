@@ -6,11 +6,13 @@ const validate = (T, sender_id) => {
           if (err) {
               console.log(err);
               resolve(false);
-          }
+					}
 
           if (!data.length) {
               resolve(false);
-          }
+					}
+					
+					console.log(data);
 
           const result = {
               name: data[0].name,
