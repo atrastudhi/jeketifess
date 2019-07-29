@@ -4,7 +4,11 @@ const validate = (T, sender_id) => {
           if (err) {
               console.log(err);
               resolve(false);
-          }
+					}
+					
+					if (!data[0]) {
+						resolve(false);
+					}
 
           if (!data.length) {
               resolve(false);
