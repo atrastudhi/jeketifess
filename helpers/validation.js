@@ -6,38 +6,38 @@ const validate = (T, sender_id) => {
           if (err) {
               console.log(err);
               resolve(false);
-					}
-
-          if (!data.length) {
+					} else {
+            if (!data.length) {
               resolve(false);
-					}
-					
-					console.log(data);
+            }
+            
+            console.log(data);
 
-          const result = {
-              name: data[0].name,
-              screen_name: data[0].screen_name,
-              followers_count: data[0].followers_count,
-              friends_count: data[0].friends_count,
-              status_count: data[0].statuses_count,
-              twitter_created_at: data[0].created_at,
-              bio: data[0].description
-          };
+            const result = {
+                name: data[0].name,
+                screen_name: data[0].screen_name,
+                followers_count: data[0].followers_count,
+                friends_count: data[0].friends_count,
+                status_count: data[0].statuses_count,
+                twitter_created_at: data[0].created_at,
+                bio: data[0].description
+            };
 
-          const createdAt = moment(result.twitter_created_at, 'ddd MMM DD HH:mm:ss +ZZ YYYY');
-          const now = moment();
-          const months = now.diff(createdAt, 'months');
-          
-          // if before probation period
-          if (months < 3) {
-            resolve(false);
+            const createdAt = moment(result.twitter_created_at, 'ddd MMM DD HH:mm:ss +ZZ YYYY');
+            const now = moment();
+            const months = now.diff(createdAt, 'months');
+            
+            // if before probation period
+            if (months < 3) {
+              resolve(false);
+            }
+
+            if (result.followers_count < 26) {
+              resolve(false);
+            }
+
+            resolve(result);
           }
-
-          if (result.followers_count < 26) {
-            resolve(false);
-          }
-
-          resolve(result);
       });
     })
 }
