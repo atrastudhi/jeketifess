@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const validate = (T, sender_id) => {
     return new Promise((resolve, reject) => {
       T.get('users/lookup', { user_id: sender_id }, (err, data, response) => {
