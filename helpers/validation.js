@@ -7,14 +7,12 @@ const validate = (T, sender_id) => {
               console.log(err);
               resolve(false);
 					}
-					
-					if (!data[0]) {
-						resolve(false);
-					}
 
           if (!data.length) {
               resolve(false);
-          }
+					}
+					
+					console.log(data);
 
           const result = {
               name: data[0].name,
